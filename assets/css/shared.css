@@ -1,0 +1,36 @@
+/* Shared styles for calamity pages and status badges */
+
+.calamity-status {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+.status-pending { background: #f0ad4e; }
+.status-approved { background: #28a745; }
+.status-rejected { background: #dc3545; }
+
+.calamity-form .card {
+    border-radius: 10px;
+}
+
+.calamity-form label {
+    font-weight: 600;
+}
+
+.calamity-list .list-group-item {
+    border-left: 4px solid var(--uytsa-blue);
+}
+
+.calamity-list .list-group-item .small {
+    color: #666;
+}
+
+/* Responsive helpers */
+@media (max-width: 767px) {
+    .calamity-form .row > [class*="col-"] { width: 100%; max-width: 100%; }
+    .calamity-table td { white-space: normal; }
+    .calamity-table .btn-group { display: flex; gap: .25rem; }
+}

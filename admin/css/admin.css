@@ -1,0 +1,59 @@
+/* Admin specific adjustments for responsiveness and visuals */
+
+.container.mt-4 {
+    max-width: 1200px;
+}
+
+.card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
+
+/* Gallery card adjustments */
+.gallery-card .card-body {
+    min-height: 80px;
+}
+
+/* Ensure tables are responsive on small screens */
+.table-responsive {
+    overflow-x: auto;
+}
+
+/* Make stat cards stack nicely on small screens */
+@media (max-width: 767px) {
+    .col-md-3, .col-md-4, .col-md-6 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    .card p.display-6 {
+        font-size: 1.5rem;
+    }
+
+    .card .card-body h5 {
+        font-size: 1rem;
+    }
+}
+
+/* Small tweaks for forms */
+.form-control {
+    border-radius: .375rem;
+}
+
+/* Sidebar adjustments if used */
+.sidebar {
+    position: relative;
+    min-height: auto;
+}
+
+/* Calamity approvals styles */
+/* Calamity approvals minor layout (vertical align kept here) */
+.calamity-table td, .calamity-table th {
+    vertical-align: middle;
+}
+
+/* small spacing for the approvals page */
+.calamity-approvals-wrapper { padding-bottom: 40px; }
