@@ -52,29 +52,93 @@ $events = $conn->query("SELECT * FROM events WHERE start_date > NOW() AND status
     <title>Member Dashboard - UYTSA</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="../assets/css/modern.css" rel="stylesheet">
     <style>
-        .member-sidebar {
-            background: linear-gradient(135deg, #08203a 0%, #0f3a63 100%);
-            min-height: 100vh;
-            color: #f8fbff;
+        body {
+            background-color: #f0f2f5;
         }
         
         .member-stats {
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
             color: white;
             text-align: center;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         
-        .opportunity-card {
-            border-left: 4px solid #3498db;
-            margin-bottom: 10px;
+        .member-stats:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
         }
         
-        .announcement-card {
-            border-left: 4px solid #2ecc71;
+        .member-stats i {
+            font-size: 2rem;
             margin-bottom: 10px;
+            opacity: 0.8;
+        }
+        
+        .member-stats h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            font-family: var(--font-heading);
+        }
+        
+        .member-stats h5 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .bg-stat-1 { background: linear-gradient(135deg, var(--corporate-navy) 0%, #1e3c72 100%); }
+        .bg-stat-2 { background: linear-gradient(135deg, var(--corporate-accent) 0%, #f39c12 100%); }
+        .bg-stat-3 { background: linear-gradient(135deg, #112240 0%, #2980b9 100%); }
+        .bg-stat-4 { background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%); }
+        
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid var(--corporate-border);
+            padding: 15px 20px;
+            font-weight: 700;
+            color: var(--corporate-navy);
+        }
+        
+        .opportunity-item, .announcement-item {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+        
+        .opportunity-item:last-child, .announcement-item:last-child {
+            border-bottom: none;
+        }
+        
+        .opportunity-item:hover, .announcement-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .welcome-section {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 30px;
+            border-left: 5px solid var(--corporate-accent);
         }
     </style>
 </head>
@@ -82,77 +146,49 @@ $events = $conn->query("SELECT * FROM events WHERE start_date > NOW() AND status
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-<div class="col-md-3 col-lg-2 p-0">
-    <div class="nav flex-column bg-blue p-3 rounded member-sidebar">
-        <h4 class="text-center mb-4">
-            <i class="fas fa-user-circle"></i><br>
-            <?php echo $_SESSION['full_name']; ?>
-        </h4>
-
-        <div class="text-center mb-4">
-            <img src="<?php echo !empty($user['profile_image']) ? '../' . PROFILE_IMAGE_PATH . $user['profile_image'] : 'https://via.placeholder.com/100'; ?>" 
-                 class="rounded-circle mb-2" width="100" height="100">
-            <p class="mb-1"><?php echo $user['institution'] ?? 'Not specified'; ?></p>
-            <span class="badge bg-light text-dark">Member</span>
-        </div>
-
-        <a href="dashboard.php" class="nav-link active">
-            <i class="fas fa-tachometer-alt"></i> Dashboard
-        </a>
-        <a href="profile.php" class="nav-link">
-            <i class="fas fa-user"></i> My Profile
-        </a>
-        <a href="opportunities.php" class="nav-link">
-            <i class="fas fa-briefcase"></i> Opportunities
-        </a>
-        <a href="announcements.php" class="nav-link">
-            <i class="fas fa-bullhorn"></i> Announcements
-        </a>
-        <a href="gallery.php" class="nav-link">
-            <i class="fas fa-images"></i> Gallery
-        </a>
-        <a href="events.php" class="nav-link">
-            <i class="fas fa-calendar-alt"></i> Events
-        </a>
-        <a href="study-materials.php" class="nav-link">
-            <i class="fas fa-book"></i> Study Materials
-        </a>
-        <a href="my-contributions.php" class="nav-link">
-            <i class="fas fa-money-bill-wave"></i> My Contributions
-        </a>
-        <a href="../logout.php" class="nav-link">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
-    </div>
-</div>
+            <div class="col-md-3 col-lg-2 p-0">
+                <?php include 'sidebar.php'; ?>
+            </div>
 
             <!-- Main Content -->
             <div class="col-md-9 col-lg-10 p-4">
-                <h2 class="mb-4">Welcome to UYTSA Member Portal</h2>
+                <div class="welcome-section d-flex justify-content-between align-items-center">
+                    <div>
+                        <h2 class="mb-1 fw-bold text-navy">Member Portal</h2>
+                        <p class="mb-0 text-muted">Welcome back, <?php echo htmlspecialchars($_SESSION['full_name']); ?></p>
+                    </div>
+                    <div class="d-none d-md-block">
+                        <span class="badg bg-navy text-white px-3 py-2 rounded-pill"><?php echo date('l, F j, Y'); ?></span>
+                    </div>
+                </div>
                 
                 <!-- User Statistics -->
-                <div class="row mb-4">
+                <div class="row mb-4 g-3">
                     <div class="col-md-3">
-                        <div class="member-stats bg-primary">
-                            <h5><i class="fas fa-briefcase"></i> My Opportunities</h5>
+                        <div class="member-stats bg-stat-1">
+                            <i class="fas fa-briefcase"></i>
+                            <h5>My Opportunities</h5>
                             <h3><?php echo $userStats['my_opportunities']; ?></h3>
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="member-stats bg-success">
-                            <h5><i class="fas fa-money-bill-wave"></i> Contributions</h5>
+                        <div class="member-stats bg-stat-2">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <h5>Contributions</h5>
                             <h3><?php echo $userStats['my_contributions']; ?></h3>
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="member-stats bg-info">
-                            <h5><i class="fas fa-calendar-check"></i> Events Registered</h5>
+                        <div class="member-stats bg-stat-3">
+                            <i class="fas fa-calendar-check"></i>
+                            <h5>Events</h5>
                             <h3><?php echo $userStats['events_registered']; ?></h3>
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="member-stats bg-warning">
-                            <h5><i class="fas fa-images"></i> Gallery Uploads</h5>
+                        <div class="member-stats bg-stat-4">
+                            <i class="fas fa-images"></i>
+                            <h5>Gallery</h5>
                             <h3><?php echo $userStats['gallery_uploads']; ?></h3>
                         </div>
                     </div>
@@ -160,53 +196,65 @@ $events = $conn->query("SELECT * FROM events WHERE start_date > NOW() AND status
                 
                 <div class="row">
                     <!-- Announcements -->
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header bg-success text-white">
-                                <h5 class="mb-0">Recent Announcements</h5>
+                    <div class="col-lg-6">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0"><i class="fas fa-bullhorn text-gold me-2"></i> Recent Announcements</h5>
+                                <a href="announcements.php" class="btn btn-sm btn-outline-primary rounded-pill">View All</a>
                             </div>
-                            <div class="card-body">
-                                <?php while ($announcement = $announcements->fetch_assoc()): ?>
-                                <div class="card announcement-card">
-                                    <div class="card-body">
-                                        <h6><?php echo $announcement['title']; ?></h6>
-                                        <p class="small"><?php echo substr($announcement['content'], 0, 100) . '...'; ?></p>
-                                        <small class="text-muted">
-                                            By: <?php echo $announcement['full_name']; ?> | 
-                                            <?php echo date('M d, Y', strtotime($announcement['created_at'])); ?>
+                            <div class="card-body p-0">
+                                <?php if($announcements->num_rows > 0): ?>
+                                    <?php while ($announcement = $announcements->fetch_assoc()): ?>
+                                    <div class="announcement-item">
+                                        <h6 class="mb-1 text-navy fw-bold"><?php echo htmlspecialchars($announcement['title']); ?></h6>
+                                        <p class="small text-muted mb-1"><?php echo substr(strip_tags($announcement['content']), 0, 90) . '...'; ?></p>
+                                        <small class="text-muted" style="font-size: 0.75rem;">
+                                            <i class="far fa-clock me-1"></i> <?php echo date('M d, Y', strtotime($announcement['created_at'])); ?> 
+                                            &bull; <?php echo htmlspecialchars($announcement['full_name']); ?>
                                         </small>
                                     </div>
-                                </div>
-                                <?php endwhile; ?>
-                                <a href="announcements.php" class="btn btn-outline-success btn-sm">View All</a>
+                                    <?php endwhile; ?>
+                                <?php else: ?>
+                                    <div class="p-4 text-center text-muted">No recent announcements.</div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Opportunities -->
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header bg-primary text-white">
-                                <h5 class="mb-0">Latest Opportunities</h5>
-                            </div>
-                            <div class="card-body">
-                                <?php while ($opportunity = $opportunities->fetch_assoc()): ?>
-                                <div class="card opportunity-card">
-                                    <div class="card-body">
-                                        <h6><?php echo $opportunity['title']; ?></h6>
-                                        <span class="badge bg-info"><?php echo ucfirst($opportunity['type']); ?></span>
-                                        <?php if ($opportunity['deadline']): ?>
-                                            <span class="badge bg-warning">Deadline: <?php echo date('M d, Y', strtotime($opportunity['deadline'])); ?></span>
-                                        <?php endif; ?>
-                                        <p class="small mt-2"><?php echo substr($opportunity['description'], 0, 80) . '...'; ?></p>
-                                        <small class="text-muted">
-                                            Posted by: <?php echo $opportunity['full_name']; ?>
-                                        </small>
-                                    </div>
+                    <div class="col-lg-6">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0"><i class="fas fa-briefcase text-navy me-2"></i> Latest Opportunities</h5>
+                                <div>
+                                    <a href="opportunities.php?action=create" class="btn btn-sm btn-gold rounded-pill me-1"><i class="fas fa-plus"></i></a>
+                                    <a href="opportunities.php" class="btn btn-sm btn-outline-primary rounded-pill">View All</a>
                                 </div>
-                                <?php endwhile; ?>
-                                <a href="opportunities.php" class="btn btn-outline-primary btn-sm">View All</a>
-                                <a href="opportunities.php?action=create" class="btn btn-success btn-sm">Post Opportunity</a>
+                            </div>
+                            <div class="card-body p-0">
+                                <?php if($opportunities->num_rows > 0): ?>
+                                    <?php while ($opportunity = $opportunities->fetch_assoc()): ?>
+                                    <div class="opportunity-item">
+                                        <div class="d-flex justify-content-between align-items-start mb-1">
+                                            <h6 class="mb-0 text-navy fw-bold text-truncate" style="max-width: 70%;"><?php echo htmlspecialchars($opportunity['title']); ?></h6>
+                                            <span class="badge bg-light text-dark border"><?php echo ucfirst($opportunity['type']); ?></span>
+                                        </div>
+                                        <p class="small text-muted mb-2"><?php echo substr(strip_tags($opportunity['description']), 0, 80) . '...'; ?></p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted" style="font-size: 0.75rem;">
+                                                <i class="far fa-user me-1"></i> <?php echo htmlspecialchars($opportunity['full_name']); ?>
+                                            </small>
+                                            <?php if ($opportunity['deadline']): ?>
+                                                <small class="text-danger fw-bold" style="font-size: 0.75rem;">
+                                                    <i class="far fa-hourglass me-1"></i> Due: <?php echo date('M d', strtotime($opportunity['deadline'])); ?>
+                                                </small>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                    <?php endwhile; ?>
+                                <?php else: ?>
+                                    <div class="p-4 text-center text-muted">No opportunities listed yet.</div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -216,31 +264,34 @@ $events = $conn->query("SELECT * FROM events WHERE start_date > NOW() AND status
                 <div class="row mt-4">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header bg-warning">
-                                <h5 class="mb-0">Upcoming Events</h5>
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0"><i class="fas fa-calendar-alt text-navy me-2"></i> Upcoming Events</h5>
+                                <a href="events.php" class="btn btn-sm btn-outline-primary rounded-pill">Calendar</a>
                             </div>
                             <div class="card-body">
-                                <div class="row">
-                                    <?php while ($event = $events->fetch_assoc()): ?>
-                                    <div class="col-md-4">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <h6><?php echo $event['title']; ?></h6>
-                                                <p class="small">
-                                                    <i class="fas fa-calendar"></i> 
-                                                    <?php echo date('M d, Y H:i', strtotime($event['start_date'])); ?>
+                                <div class="row g-3">
+                                    <?php if($events->num_rows > 0): ?>
+                                        <?php while ($event = $events->fetch_assoc()): ?>
+                                        <div class="col-md-4">
+                                            <div class="border rounded p-3 h-100 position-relative bg-light">
+                                                <div class="position-absolute top-0 end-0 p-3">
+                                                    <span class="badge bg-gold text-white"><?php echo date('d M', strtotime($event['start_date'])); ?></span>
+                                                </div>
+                                                <h6 class="fw-bold text-navy mt-2 pe-5"><?php echo htmlspecialchars($event['title']); ?></h6>
+                                                <p class="small text-muted mb-2">
+                                                    <i class="fas fa-map-marker-alt me-1"></i> <?php echo htmlspecialchars($event['location']); ?>
+                                                </small>
+                                                <p class="small text-muted mb-3">
+                                                    <i class="far fa-clock me-1"></i> <?php echo date('H:i', strtotime($event['start_date'])); ?>
                                                 </p>
-                                                <p class="small">
-                                                    <i class="fas fa-map-marker-alt"></i> 
-                                                    <?php echo $event['location']; ?>
-                                                </p>
-                                                <a href="events.php?view=<?php echo $event['id']; ?>" class="btn btn-sm btn-outline-warning">View Details</a>
+                                                <a href="events.php?view=<?php echo $event['id']; ?>" class="btn btn-sm btn-outline-dark w-100 stretched-link">Details</a>
                                             </div>
                                         </div>
-                                    </div>
-                                    <?php endwhile; ?>
+                                        <?php endwhile; ?>
+                                    <?php else: ?>
+                                        <div class="col-12 text-center text-muted py-3">No upcoming events scheduled.</div>
+                                    <?php endif; ?>
                                 </div>
-                                <a href="events.php" class="btn btn-warning btn-sm mt-3">View All Events</a>
                             </div>
                         </div>
                     </div>

@@ -1,15 +1,132 @@
 /* Admin specific adjustments for responsiveness and visuals */
 
+:root {
+    --sidebar-width: 250px;
+    --header-height: 60px;
+    /* Map to modern.css variables */
+    --primary-color: var(--corporate-navy);
+    --secondary-color: var(--corporate-blue);
+    --accent-color: var(--corporate-accent);
+}
+
+body {
+    background-color: var(--corporate-light);
+    font-family: var(--font-primary);
+}
+
 .container.mt-4 {
-    max-width: 1200px;
+    max-width: 1400px;
+}
+
+/* Sidebar Styles */
+.admin-sidebar {
+    /* Use solid color instead of gradient for a cleaner look or keep gradient if preferred */
+    background: linear-gradient(180deg, var(--corporate-navy) 0%, var(--corporate-blue) 100%);
+    min-height: 100vh;
+    color: white;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-wrapper {
+    /* Ensure it behaves correctly in grid */
+    min-height: 100vh;
+    background: var(--corporate-navy);
+    transition: all 0.3s;
+}
+
+/* Ensure sidebar doesn't take full height on mobile if stacked */
+@media (max-width: 768px) {
+    .sidebar-wrapper {
+        min-height: auto !important;
+        margin-bottom: 20px;
+    }
+}
+
+.admin-sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.75);
+    padding: 12px 20px;
+    margin-bottom: 5px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    border-left: 3px solid transparent;
+    font-size: 0.95rem;
+}
+
+.admin-sidebar .nav-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    transform: translateX(5px);
+}
+
+.admin-sidebar .nav-link.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-left: 3px solid var(--accent-color);
+    font-weight: 600;
+}
+
+.admin-sidebar .nav-link i {
+    width: 25px;
+    text-align: center;
+    margin-right: 12px;
+    color: var(--accent-color);
+    opacity: 0.8;
+}
+
+.admin-sidebar .nav-link.active i {
+    opacity: 1;
+}
+
+.admin-sidebar h6 {
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: 25px;
+    margin-bottom: 12px;
+    padding-left: 20px;
+    font-weight: 700;
+}
+
+/* Card Improvements */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    background: white;
+    margin-bottom: 24px;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+}
+
+.card-header {
+    background-color: white;
+    border-bottom: 1px solid var(--corporate-border);
+    padding: 20px 24px;
+    font-weight: 700;
+    color: var(--corporate-navy);
+    font-family: var(--font-heading);
+}
+
+.stat-card {
+    color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
 }
 
 .card img {
     width: 100%;
     height: 220px;
     object-fit: cover;
-    border-top-left-radius: .25rem;
-    border-top-right-radius: .25rem;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
 }
 
 /* Gallery card adjustments */
@@ -17,16 +134,49 @@
     min-height: 80px;
 }
 
-/* Ensure tables are responsive on small screens */
+/* Table Improvements */
 .table-responsive {
-    overflow-x: auto;
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    background-color: #f1f3f5;
+    border-bottom: 2px solid #e9ecef;
+    color: var(--corporate-navy);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    padding: 16px;
+    letter-spacing: 0.5px;
+}
+
+.table tbody td {
+    padding: 16px;
+    vertical-align: middle;
+    color: var(--corporate-dark);
+    border-bottom: 1px solid #f1f3f5;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #fafbfc;
 }
 
 /* Make stat cards stack nicely on small screens */
 @media (max-width: 767px) {
-    .col-md-3, .col-md-4, .col-md-6 {
-        flex: 0 0 100% !important;
-        max-width: 100% !important;
+    .sidebar-wrapper {
+        min-height: auto;
+    }
+
+    .col-md-3,
+    .col-md-4,
+    .col-md-6 {
+        margin-bottom: 15px;
     }
 
     .card p.display-6 {
@@ -40,20 +190,24 @@
 
 /* Small tweaks for forms */
 .form-control {
-    border-radius: .375rem;
+    border-radius: 8px;
+    padding: 12px 16px;
+    border: 1px solid #e2e8f0;
+    background-color: #fcfcfc;
 }
 
-/* Sidebar adjustments if used */
-.sidebar {
-    position: relative;
-    min-height: auto;
+.form-control:focus {
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(17, 34, 64, 0.1);
+    border-color: var(--corporate-blue);
 }
 
 /* Calamity approvals styles */
-/* Calamity approvals minor layout (vertical align kept here) */
-.calamity-table td, .calamity-table th {
+.calamity-table td,
+.calamity-table th {
     vertical-align: middle;
 }
 
-/* small spacing for the approvals page */
-.calamity-approvals-wrapper { padding-bottom: 40px; }
+.calamity-approvals-wrapper {
+    padding-bottom: 40px;
+}

@@ -114,23 +114,13 @@ $stats = $conn->query("
     FROM opportunities
 ")->fetch_assoc();
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Opportunities - UYTSA Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-</head>
-<body>
-    <?php include 'header.php'; ?>
+<?php include 'header.php'; ?>
     
     <div class="container-fluid mt-4">
         <div class="row">
             <?php include 'sidebar.php'; ?>
             
-            <div class="col-md-9">
+            <div class="col-md-10">
                 <!-- Opportunity Statistics -->
                 <div class="row mb-4">
                     <div class="col-md-3">
@@ -170,9 +160,9 @@ $stats = $conn->query("
                 <div class="card">
                     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                         <h4 class="mb-0">Manage Opportunities</h4>
-                        <a href="../user/opportunities.php?action=create" class="btn btn-light btn-sm">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#addOpportunityModal">
                             <i class="fas fa-plus"></i> Add Opportunity
-                        </a>
+                        </button>
                     </div>
                     <div class="card-body">
                         <!-- Success/Error Messages -->
@@ -422,6 +412,67 @@ $stats = $conn->query("
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <!-- Add Opportunity Modal -->
+    <div class="modal fade" id="addOpportunityModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Opportunity</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="POST" action="../user/opportunities.php?action=create">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Title *</label>
+                                <input type="text" name="title" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Type *</label>
+                                <select name="type" class="form-control" required>
+                                    <option value="internship">Internship</option>
+                                    <option value="scholarship">Scholarship</option>
+                                    <option value="job">Job</option>
+                                    <option value="volunteer">Volunteer</option>
+                                    <option value="training">Training</option>
+                                    <option value="competition">Competition</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Organization *</label>
+                            <input type="text" name="organization" class="form-control" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Deadline</label>
+                                <input type="date" name="deadline" class="form-control">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Contact Email</label>
+                                <input type="email" name="contact_email" class="form-control">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description *</label>
+                            <textarea name="description" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Requirements</label>
+                            <textarea name="requirements" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Application Link</label>
+                            <input type="url" name="link" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add Opportunity</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<?php include 'footer.php'; ?>

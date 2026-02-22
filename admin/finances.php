@@ -84,23 +84,13 @@ $stats = $conn->query("
 // Get members for dropdown
 $members = $conn->query("SELECT id, full_name, username FROM users ORDER BY full_name");
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Finances - UYTSA Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-</head>
-<body>
-    <?php include 'header.php'; ?>
+<?php include 'header.php'; ?>
     
     <div class="container-fluid mt-4">
         <div class="row">
             <?php include 'sidebar.php'; ?>
             
-            <div class="col-md-9">
+            <div class="col-md-10">
                 <!-- Financial Statistics -->
                 <div class="row mb-4">
                     <div class="col-md-4">
@@ -418,6 +408,4 @@ $members = $conn->query("SELECT id, full_name, username FROM users ORDER BY full
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<?php include 'footer.php'; ?>

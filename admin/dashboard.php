@@ -1,3 +1,4 @@
+<?php include 'header.php'; ?>
 <?php
 require_once '../includes/session.php';
 require_once '../includes/functions.php';
@@ -46,110 +47,14 @@ $recentActivities = getRecentActivities(5);
 // Get executive members
 $executives = $conn->query("SELECT id, full_name, role, email, phone FROM users WHERE role IN ('Patron', 'Chairperson', 'Vice_Chairperson', 'Secretary_General', 'Treasurer', 'Organizing_Secretary', 'Publicity_Officer', 'NextGen_Docket') ORDER BY FIELD(role, 'Chairperson', 'Vice_Chairperson', 'Secretary_General', 'Treasurer', 'Organizing_Secretary', 'Publicity_Officer', 'NextGen_Docket', 'Patron')");
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - UYTSA</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        .sidebar {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            min-height: 100vh;
-            color: white;
-        }
-        
-        .sidebar a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 15px;
-            display: block;
-            border-radius: 5px;
-            margin-bottom: 5px;
-        }
-        
-        .sidebar a:hover, .sidebar a.active {
-            background: rgba(255,255,255,0.1);
-        }
-        
-        .stat-card {
-            border: none;
-            border-radius: 10px;
-            transition: transform 0.3s;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .user-role-badge {
-            font-size: 0.7rem;
-            padding: 3px 8px;
-            border-radius: 10px;
-        }
-    </style>
-</head>
-<body>
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <div class="col-md-2 p-0 sidebar">
-                <div class="p-3">
-                    <h4 class="text-center mb-4">
-                        <i class="fas fa-users"></i> UYTSA Admin
-                    </h4>
-                    <div class="text-center mb-4">
-                        <small>Welcome, <?php echo $_SESSION['full_name']; ?></small>
-                        <br>
-                        <span class="badge bg-warning"><?php echo $_SESSION['role']; ?></span>
-                    </div>
-                    
-                    <nav class="nav flex-column">
-                        <a href="dashboard.php" class="active">
-                            <i class="fas fa-tachometer-alt"></i> Dashboard
-                        </a>
-                        <a href="announcements.php">
-                            <i class="fas fa-bullhorn"></i> Announcements
-                        </a>
-                        <a href="members.php">
-                            <i class="fas fa-users"></i> Members
-                        </a>
-                        <a href="opportunities.php">
-                            <i class="fas fa-briefcase"></i> Opportunities
-                        </a>
-                        <a href="finances.php">
-                            <i class="fas fa-money-bill-wave"></i> Finances
-                        </a>
-                        <a href="calamity-approvals.php">
-                            <i class="fas fa-exclamation-triangle"></i> Calamities
-                        </a>
-                        <a href="gallery.php">
-                            <i class="fas fa-images"></i> Gallery
-                        </a>
-                        <a href="events.php">
-                            <i class="fas fa-calendar-alt"></i> Events
-                        </a>
-                        <a href="settings.php">
-                            <i class="fas fa-cog"></i> Settings
-                        </a>
-                        <a href="reports.php">
-                            <i class="fas fa-chart-bar"></i> Reports
-                        </a>
-                        <a href="../user/profile.php">
-                            <i class="fas fa-user"></i> Profile
-                        </a>
-                        <a href="../logout.php">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </a>
-                    </nav>
-                </div>
-            </div>
+            <?php include 'sidebar.php'; ?>
             
             <!-- Main Content -->
             <div class="col-md-10 p-4">
-                <h2 class="mb-4">Admin Dashboard</h2>
+                <h2 class="mb-4">Welcome, Admin</h2>
                 
                 <!-- Statistics Cards -->
                 <div class="row mb-4">
@@ -288,6 +193,4 @@ $executives = $conn->query("SELECT id, full_name, role, email, phone FROM users 
         </div>
     </div>
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<?php include 'footer.php'; ?>

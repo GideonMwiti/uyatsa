@@ -1,5 +1,32 @@
 // UYTSA System JavaScript
 
+// Fix modal flicker for announcements
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.btn-info[data-bs-toggle="modal"]').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+    });
+
+    // Prevent modal flicker when mouse leaves page
+    document.querySelectorAll('.modal').forEach(function(modal) {
+        modal.addEventListener('mouseleave', function(e) {
+            // Only hide modal if mouse leaves window, not just modal
+            if (!document.hasFocus() || e.relatedTarget === null) {
+                var bsModal = bootstrap.Modal.getInstance(modal);
+                if (bsModal) bsModal.hide();
+            }
+        });
+        modal.addEventListener('mouseout', function(e) {
+            if (!document.hasFocus() || e.relatedTarget === null) {
+                var bsModal = bootstrap.Modal.getInstance(modal);
+                if (bsModal) bsModal.hide();
+            }
+        });
+    });
+});
+
 // DOM Ready
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize tooltips

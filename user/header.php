@@ -4,7 +4,7 @@ if (!isset($_SESSION)) {
 }
 ?>
 <!-- User Header -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--corporate-navy);">
     <div class="container">
         <a class="navbar-brand" href="../index.php">
             <i class="fas fa-users"></i> UYTSA

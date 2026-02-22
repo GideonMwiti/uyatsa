@@ -26,32 +26,37 @@ if (isset($_GET['delete'])) { $id=(int)$_GET['delete']; $conn->query("DELETE FRO
 $events = $conn->query("SELECT e.*, u.full_name FROM events e LEFT JOIN users u ON e.organizer_id = u.id ORDER BY start_date DESC");
 ?>
 <?php include 'header.php'; ?>
-<div class="container mt-4">
-    <h3>Events Management</h3>
-    <div class="card mb-3 p-3">
-        <form method="post" class="row g-2">
-            <div class="col-md-4"><input name="title" class="form-control" placeholder="Title" required></div>
-            <div class="col-md-3"><input type="datetime-local" name="start_date" class="form-control" required></div>
-            <div class="col-md-3"><input type="datetime-local" name="end_date" class="form-control"></div>
-            <div class="col-md-2"><input name="location" class="form-control" placeholder="Location"></div>
-            <div class="col-12"><textarea name="description" class="form-control" placeholder="Description"></textarea></div>
-            <div class="col-12 text-end"><button class="btn btn-primary" name="create_event">Create Event</button></div>
-        </form>
-    </div>
-
+<div class="container-fluid">
     <div class="row">
-        <?php while ($e = $events->fetch_assoc()): ?>
-        <div class="col-md-6 mb-3">
-            <div class="card p-3">
-                <h5><?php echo htmlspecialchars($e['title']); ?></h5>
-                <p class="small"><?php echo date('M d, Y H:i', strtotime($e['start_date'])); ?> • <?php echo htmlspecialchars($e['location']); ?></p>
-                <p><?php echo htmlspecialchars(substr($e['description'],0,200)); ?></p>
-                <div class="text-end">
-                    <a href="events.php?delete=<?php echo $e['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Delete event?')">Delete</a>
+        <?php include 'sidebar.php'; ?>
+        <div class="col-md-10">
+            <h3 class="mb-3">Events Management</h3>
+            <div class="card mb-3 p-3">
+                <form method="post" class="row g-2">
+                    <div class="col-md-4"><input name="title" class="form-control" placeholder="Title" required></div>
+                    <div class="col-md-3"><input type="datetime-local" name="start_date" class="form-control" required></div>
+                    <div class="col-md-3"><input type="datetime-local" name="end_date" class="form-control"></div>
+                    <div class="col-md-2"><input name="location" class="form-control" placeholder="Location"></div>
+                    <div class="col-12"><textarea name="description" class="form-control" placeholder="Description"></textarea></div>
+                    <div class="col-12 text-end"><button class="btn btn-primary" name="create_event">Create Event</button></div>
+                </form>
+            </div>
+
+            <div class="row">
+                <?php while ($e = $events->fetch_assoc()): ?>
+                <div class="col-md-6 mb-3">
+                    <div class="card p-3">
+                        <h5><?php echo htmlspecialchars($e['title']); ?></h5>
+                        <p class="small"><?php echo date('M d, Y H:i', strtotime($e['start_date'])); ?> • <?php echo htmlspecialchars($e['location']); ?></p>
+                        <p><?php echo htmlspecialchars(substr($e['description'],0,200)); ?></p>
+                        <div class="text-end">
+                            <a href="events.php?delete=<?php echo $e['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Delete event?')">Delete</a>
+                        </div>
+                    </div>
                 </div>
+                <?php endwhile; ?>
             </div>
         </div>
-        <?php endwhile; ?>
     </div>
 </div>
 <?php include 'footer.php'; ?>

@@ -11,43 +11,35 @@ if (!isset($_SESSION)) {
     <title>UYTSA Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="../assets/css/style.css" rel="stylesheet">
-    <link href="../assets/css/shared.css" rel="stylesheet">
-    <link href="css/admin.css" rel="stylesheet">
+    <link href="../assets/css/style.css?v=<?php echo time(); ?>" rel="stylesheet">
+    <link href="../assets/css/shared.css?v=<?php echo time(); ?>" rel="stylesheet">
+    <link href="../assets/css/modern.css?v=<?php echo time(); ?>" rel="stylesheet">
+    <link href="css/admin.css?v=<?php echo time(); ?>" rel="stylesheet">
 </head>
 <body>
 <!-- Admin Header -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="dashboard.php">
-            <i class="fas fa-users"></i> UYTSA Admin
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="adminNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center" href="profile.php">
-                        <?php if (!empty($_SESSION['profile_image'])): ?>
-                            <img src="../assets/uploads/profile/<?php echo htmlspecialchars($_SESSION['profile_image']); ?>" alt="avatar" style="width:30px;height:30px;border-radius:50%;object-fit:cover;margin-right:8px;">
-                        <?php else: ?>
-                            <i class="fas fa-user-shield me-2"></i>
-                        <?php endif; ?>
-                        <?php echo htmlspecialchars($_SESSION['full_name'] ?? ''); ?> <small class="ms-2 text-muted">(<?php echo htmlspecialchars($_SESSION['role'] ?? ''); ?>)</small>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="../index.php">
-                        <i class="fas fa-home"></i> Public Site
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-danger" href="../logout.php">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
-                </li>
-            </ul>
+<header class="admin-header-bar" style="width:100%;background:var(--corporate-navy,#1a237e);color:#fff;padding:12px 0;box-shadow:0 2px 8px rgba(0,0,0,0.05);margin-bottom:0;">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+            <img src="../assets/uploads/profile/693ffd64c332a8.51777441.jpg" alt="UYTSA Logo" style="height:40px;width:40px;border-radius:50%;object-fit:cover;margin-right:12px;background:#fff;">
+            <span class="fw-bold fs-5">UYTSA Admin Portal</span>
+        </div>
+        <div class="d-flex align-items-center">
+            <a href="../index.php" class="btn btn-light btn-sm me-3" style="background:#fff;color:#1a237e;border-radius:20px;font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,0.07);"><i class="fas fa-home me-1"></i> Back to Website</a>
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="adminProfileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <?php if (!empty($_SESSION['profile_image'])): ?>
+                        <img src="../assets/uploads/profile/<?php echo htmlspecialchars($_SESSION['profile_image']); ?>" alt="avatar" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #fff;">
+                    <?php else: ?>
+                        <i class="fas fa-user-circle fa-2x text-white"></i>
+                    <?php endif; ?>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminProfileDropdown">
+                    <li><a class="dropdown-item" href="profile.php"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </div>
         </div>
     </div>
-</nav>
+</header>

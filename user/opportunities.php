@@ -122,6 +122,49 @@ $totalPages = ceil($totalOpps / $limit);
                 <?php include 'sidebar.php'; ?>
             </div>
             <div class="col-md-9">
+                <!-- Statistics Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card text-center border-primary">
+                            <div class="card-body">
+                                <h6 class="card-title text-primary">Total Opportunities</h6>
+                                <h3 class="fw-bold"><?php echo $totalOpps; ?></h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center border-success">
+                            <div class="card-body">
+                                <h6 class="card-title text-success">My Posts</h6>
+                                <h3 class="fw-bold">
+                                    <?php
+                                    $myCountStmt = $conn->prepare("SELECT COUNT(*) as total FROM opportunities WHERE posted_by = ?");
+                                    $myCountStmt->bind_param("i", $userId);
+                                    $myCountStmt->execute();
+                                    $myCountResult = $myCountStmt->get_result()->fetch_assoc();
+                                    echo $myCountResult['total'];
+                                    ?>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center border-info">
+                            <div class="card-body">
+                                <h6 class="card-title text-info">Verified</h6>
+                                <h3 class="fw-bold">
+                                    <?php
+                                    $verifiedStmt = $conn->prepare("SELECT COUNT(*) as total FROM opportunities WHERE is_verified = 1");
+                                    $verifiedStmt->execute();
+                                    $verifiedResult = $verifiedStmt->get_result()->fetch_assoc();
+                                    echo $verifiedResult['total'];
+                                    ?>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Opportunities Card -->
                 <div class="card">
                     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                         <h4 class="mb-0">Opportunities</h4>
@@ -266,13 +309,12 @@ $totalPages = ceil($totalOpps / $limit);
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Opportunity Title *</label>
+                                <label class="form-label">Title *</label>
                                 <input type="text" name="title" class="form-control" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Type *</label>
                                 <select name="type" class="form-control" required>
-                                    <option value="">Select Type</option>
                                     <option value="internship">Internship</option>
                                     <option value="scholarship">Scholarship</option>
                                     <option value="job">Job</option>
@@ -282,12 +324,10 @@ $totalPages = ceil($totalOpps / $limit);
                                 </select>
                             </div>
                         </div>
-                        
                         <div class="mb-3">
-                            <label class="form-label">Organization/Company *</label>
+                            <label class="form-label">Organization *</label>
                             <input type="text" name="organization" class="form-control" required>
                         </div>
-                        
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Deadline</label>
@@ -298,20 +338,17 @@ $totalPages = ceil($totalOpps / $limit);
                                 <input type="email" name="contact_email" class="form-control">
                             </div>
                         </div>
-                        
                         <div class="mb-3">
                             <label class="form-label">Description *</label>
                             <textarea name="description" class="form-control" rows="4" required></textarea>
                         </div>
-                        
                         <div class="mb-3">
                             <label class="form-label">Requirements</label>
                             <textarea name="requirements" class="form-control" rows="3"></textarea>
                         </div>
-                        
                         <div class="mb-3">
                             <label class="form-label">Application Link</label>
-                            <input type="url" name="link" class="form-control" placeholder="https://">
+                            <input type="url" name="link" class="form-control">
                         </div>
                     </div>
                     <div class="modal-footer">

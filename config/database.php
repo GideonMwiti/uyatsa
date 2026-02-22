@@ -2,7 +2,7 @@
 // Database configuration for development
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
-define('DB_PASS', '17194');
+define('DB_PASS', '@Learnpython.002');
 define('DB_NAME', 'uytsa_db');
 
 // Create connection

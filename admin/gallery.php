@@ -18,21 +18,26 @@ if (isset($_GET['delete'])) {
 $gallery = $conn->query("SELECT g.*, u.full_name FROM gallery g LEFT JOIN users u ON g.uploaded_by = u.id ORDER BY created_at DESC");
 ?>
 <?php include 'header.php'; ?>
-<div class="container mt-4">
-    <h3>Gallery Management</h3>
-    <div class="row mt-3">
-        <?php while ($img = $gallery->fetch_assoc()): ?>
-        <div class="col-md-4 mb-3">
-            <div class="card">
-                <img src="../assets/uploads/gallery/<?php echo $img['image_path']; ?>" class="img-fluid" />
-                <div class="card-body">
-                    <h6><?php echo htmlspecialchars($img['title']); ?></h6>
-                    <p class="small">By: <?php echo htmlspecialchars($img['full_name'] ?? 'N/A'); ?></p>
-                    <a href="gallery.php?delete=<?php echo $img['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Delete this image?')">Delete</a>
+<div class="container-fluid">
+    <div class="row">
+        <?php include 'sidebar.php'; ?>
+        <div class="col-md-10">
+            <h3 class="mb-3">Gallery Management</h3>
+            <div class="row">
+                <?php while ($img = $gallery->fetch_assoc()): ?>
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img src="../assets/uploads/gallery/<?php echo $img['image_path']; ?>" class="img-fluid" />
+                        <div class="card-body">
+                            <h6><?php echo htmlspecialchars($img['title']); ?></h6>
+                            <p class="small">By: <?php echo htmlspecialchars($img['full_name'] ?? 'N/A'); ?></p>
+                            <a href="gallery.php?delete=<?php echo $img['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Delete this image?')">Delete</a>
+                        </div>
+                    </div>
                 </div>
+                <?php endwhile; ?>
             </div>
         </div>
-        <?php endwhile; ?>
     </div>
 </div>
 <?php include 'footer.php'; ?>
