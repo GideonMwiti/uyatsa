@@ -77,16 +77,16 @@ $totalPages = ceil($totalAnnouncements / $limit);
     <title>Announcements - UYTSA</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="../assets/css/modern.css" rel="stylesheet">
+    <link href="css/user.css" rel="stylesheet">
 </head>
 <body>
     <?php include 'header.php'; ?>
     
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-3">
-                <?php include 'sidebar.php'; ?>
-            </div>
-            <div class="col-md-9">
+    <div class="dashboard-row">
+            <?php include 'sidebar.php'; ?>
+            <div class="dashboard-main-content">
+                 <div class="p-4 w-100">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
                         <h4 class="mb-0">Announcements</h4>
@@ -188,5 +188,5 @@ $totalPages = ceil($totalAnnouncements / $limit);
     <?php include 'footer.php'; ?>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+</div></body>
 </html>

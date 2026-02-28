@@ -41,15 +41,15 @@ $events = $conn->query("SELECT e.*, u.full_name FROM events e LEFT JOIN users u 
     <style>
         .event-card { border-left: 4px solid #f39c12; }
     </style>
+    <link href="../assets/css/modern.css" rel="stylesheet">
+    <link href="css/user.css" rel="stylesheet">
 </head>
 <body>
     <?php include 'header.php'; ?>
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-3">
-                <?php include 'sidebar.php'; ?>
-            </div>
-            <div class="col-md-9">
+    <div class="dashboard-row">
+            <?php include 'sidebar.php'; ?>
+            <div class="dashboard-main-content">
+                 <div class="p-4 w-100">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h4>Events</h4>
                 </div>
@@ -93,5 +93,5 @@ $events = $conn->query("SELECT e.*, u.full_name FROM events e LEFT JOIN users u 
     </div>
     <?php include 'footer.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+</div></body>
 </html>

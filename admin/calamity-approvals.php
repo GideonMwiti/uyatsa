@@ -5,7 +5,12 @@ requireLogin();
 requireExecutive();
 
 $message = '';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && isset($_POST['id'])) {
+    if (!hasPermission(PERM_FINANCES)) {
+        die("Unauthorized access.");
+    }
+
     $id = (int)$_POST['id'];
     $action = $_POST['action'];
     $response = sanitize($_POST['admin_response'] ?? '');
@@ -76,16 +81,20 @@ include 'header.php';
                             <td><?php echo htmlspecialchars($c['created_at']); ?></td>
                             <td><span class="calamity-status <?php echo 'status-' . htmlspecialchars($c['status']); ?>"><?php echo ucfirst($c['status']); ?></span></td>
                             <td>
+                                <?php if (hasPermission(PERM_FINANCES)): ?>
                                 <form method="post" class="d-flex gap-2">
                                     <input type="hidden" name="id" value="<?php echo $c['id']; ?>">
                                     <input type="text" name="admin_response" class="form-control form-control-sm" placeholder="Response" value="<?php echo htmlspecialchars($c['admin_response']); ?>">
-                                    <?php $isTreasurer = (strcasecmp($_SESSION['role'] ?? '', 'Treasurer') === 0); ?>
+                                    <?php $isTreasurer = (strcasecmp($_SESSION['role'] ?? '', 'Treasurer') === 0) || in_array($_SESSION['role'] ?? '', ['Patron', 'Chairperson', 'Vice_Chairperson']); ?>
                                     <input type="number" step="0.01" name="amount_given" class="form-control form-control-sm" style="max-width:120px;" value="<?php echo htmlspecialchars($c['amount_given']); ?>" <?php echo $isTreasurer ? '' : 'readonly'; ?>>
                                     <div class="btn-group">
                                         <button name="action" value="approve" class="btn btn-sm btn-success">Approve</button>
                                         <button name="action" value="reject" class="btn btn-sm btn-danger">Reject</button>
                                     </div>
                                 </form>
+                                <?php else: ?>
+                                    <span class="text-muted">View Only</span>
+                                <?php endif; ?>
                             </td>
                             <td><?php if (!empty($c['admin_response'])) echo htmlspecialchars($c['admin_response']); ?><br><?php if (!empty($c['amount_given'])) echo 'Ksh '.number_format($c['amount_given'],2); ?></td>
                         </tr>

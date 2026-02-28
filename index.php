@@ -385,9 +385,11 @@ require_once 'includes/session.php';
                         letter-spacing: 0.5px;
                     }
                 </style>
-            </div>
-            <div class="footer-bottom text-center">
-                <p>&copy; <?php echo date('Y'); ?> Ulumbi Youth & Tertiary Students Association. All Rights Reserved.</p>
+            <div class="footer-bottom text-center mt-4">
+                <p class="mb-1">&copy; <?php echo date('Y'); ?> Ulumbi Youth & Tertiary Students Association. All Rights Reserved.</p>
+                <p class="mb-0 small text-white-50">
+                    Developed by <a href="https://www.sericsoft.com" target="_blank" rel="noopener noreferrer" class="text-info text-decoration-none">Sericsoft Innovations Ltd</a>
+                </p>
             </div>
         </div>
     </footer>

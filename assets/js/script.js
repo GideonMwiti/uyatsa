@@ -166,7 +166,12 @@ function initNotifications() {
     // Mark notifications as read
     const notificationLinks = document.querySelectorAll('.notification-link');
     notificationLinks.forEach(function(link) {
-        link.addEventListener('click', function() {
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (!href || href === '#' || href === '') {
+                e.preventDefault();
+            }
+            
             const notificationId = this.dataset.notificationId;
             if (notificationId) {
                 markNotificationAsRead(notificationId);

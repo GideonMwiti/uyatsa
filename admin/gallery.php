@@ -8,6 +8,9 @@ $conn = getDBConnection();
 
 // List gallery items with ability to delete
 if (isset($_GET['delete'])) {
+    if (!hasPermission(PERM_CONTENT)) {
+        die("Unauthorized access.");
+    }
     $id = (int)$_GET['delete'];
     $stmt = $conn->prepare("DELETE FROM gallery WHERE id = ?");
     $stmt->bind_param('i', $id);
@@ -31,7 +34,9 @@ $gallery = $conn->query("SELECT g.*, u.full_name FROM gallery g LEFT JOIN users 
                         <div class="card-body">
                             <h6><?php echo htmlspecialchars($img['title']); ?></h6>
                             <p class="small">By: <?php echo htmlspecialchars($img['full_name'] ?? 'N/A'); ?></p>
+                            <?php if (hasPermission(PERM_CONTENT)): ?>
                             <a href="gallery.php?delete=<?php echo $img['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Delete this image?')">Delete</a>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>

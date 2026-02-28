@@ -45,4 +45,42 @@ function requireExecutive() {
         exit();
     }
 }
+
+// RBAC Permissions
+define('PERM_FINANCES', 'finances');
+define('PERM_EVENTS', 'events');
+define('PERM_MEMBERS', 'members');
+define('PERM_CONTENT', 'content'); // announcements, opportunities, gallery
+define('PERM_SETTINGS', 'settings');
+
+// Check if user has a specific permission
+function hasPermission($permission) {
+    if (!isLoggedIn()) return false;
+
+    $role = $_SESSION['role'];
+    
+    // Admins have all permissions
+    if (in_array($role, ['Patron', 'Chairperson', 'Vice_Chairperson'])) {
+        return true;
+    }
+
+    switch ($permission) {
+        case PERM_FINANCES:
+            // Treasurer can manage finances
+            return $role === 'Treasurer';
+            
+        case PERM_EVENTS:
+        case PERM_MEMBERS:
+        case PERM_CONTENT:
+            // Secretary General, Organizing Secretary, Publicity Officer can manage content/events/members
+            return in_array($role, ['Secretary_General', 'Organizing_Secretary', 'Publicity_Officer', 'NextGen_Docket']);
+            
+        case PERM_SETTINGS:
+            // Only top admins (handled above)
+            return false;
+            
+        default:
+            return false;
+    }
+}
 ?>

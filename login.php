@@ -22,29 +22,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($result->num_rows === 1) {
             $user = $result->fetch_assoc();
             
-            // Development: Simple password check (plain text)
-            // In production, use: password_verify($password, $user['password'])
-            if ($password === $user['password']) {
+            // Support both modern parsed BCRYPT hashes and legacy plain-text development logins
+            if (password_verify($password, $user['password']) || $password === $user['password']) {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role'] = $user['role'];
                 $_SESSION['full_name'] = $user['full_name'];
+                $_SESSION['profile_image'] = $user['profile_image'];
+                $_SESSION['institution'] = $user['institution'];
                 
-                // Update last login
-                $updateStmt = $conn->prepare("UPDATE users SET last_login = NOW() WHERE id = ?");
-                $updateStmt->bind_param("i", $user['id']);
-                $updateStmt->execute();
-                
-                // Redirect based on role
-                $executiveRoles = ['Patron', 'Chairperson', 'Vice_Chairperson', 'Secretary_General',
-                                 'Treasurer', 'Organizing_Secretary', 'Publicity_Officer', 'NextGen_Docket'];
-                
-                if (in_array($user['role'], $executiveRoles)) {
-                    header('Location: admin/dashboard.php');
+                // Check if account is approved
+                if ($user['is_approved'] == 0) {
+                    session_destroy();
+                    session_start();
+                    $error = 'Your account is pending administrator approval.';
                 } else {
-                    header('Location: user/dashboard.php');
+                    // Update last login
+                    $updateStmt = $conn->prepare("UPDATE users SET last_login = NOW() WHERE id = ?");
+                    $updateStmt->bind_param("i", $user['id']);
+                    $updateStmt->execute();
+                    
+                    // Redirect based on role
+                    $executiveRoles = ['Patron', 'Chairperson', 'Vice_Chairperson', 'Secretary_General',
+                                     'Treasurer', 'Organizing_Secretary', 'Publicity_Officer', 'NextGen_Docket'];
+                    
+                    if (in_array($user['role'], $executiveRoles)) {
+                        header('Location: admin/dashboard.php');
+                    } else {
+                        header('Location: user/dashboard.php');
+                    }
+                    exit();
                 }
-                exit();
             } else {
                 $error = 'Invalid password';
             }

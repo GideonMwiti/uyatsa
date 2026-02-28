@@ -6,6 +6,11 @@ requireExecutive();
 
 $conn = getDBConnection();
 
+// Ensure user has content permission for POST actions and delete
+if (($_SERVER['REQUEST_METHOD'] === 'POST' || isset($_GET['delete'])) && !hasPermission(PERM_CONTENT)) {
+    die("Unauthorized access.");
+}
+
 // Create event
 if ($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['create_event'])) {
     $title = sanitize($_POST['title']);
@@ -31,6 +36,7 @@ $events = $conn->query("SELECT e.*, u.full_name FROM events e LEFT JOIN users u 
         <?php include 'sidebar.php'; ?>
         <div class="col-md-10">
             <h3 class="mb-3">Events Management</h3>
+            <?php if (hasPermission(PERM_CONTENT)): ?>
             <div class="card mb-3 p-3">
                 <form method="post" class="row g-2">
                     <div class="col-md-4"><input name="title" class="form-control" placeholder="Title" required></div>
@@ -41,6 +47,7 @@ $events = $conn->query("SELECT e.*, u.full_name FROM events e LEFT JOIN users u 
                     <div class="col-12 text-end"><button class="btn btn-primary" name="create_event">Create Event</button></div>
                 </form>
             </div>
+            <?php endif; ?>
 
             <div class="row">
                 <?php while ($e = $events->fetch_assoc()): ?>
@@ -49,9 +56,11 @@ $events = $conn->query("SELECT e.*, u.full_name FROM events e LEFT JOIN users u 
                         <h5><?php echo htmlspecialchars($e['title']); ?></h5>
                         <p class="small"><?php echo date('M d, Y H:i', strtotime($e['start_date'])); ?> • <?php echo htmlspecialchars($e['location']); ?></p>
                         <p><?php echo htmlspecialchars(substr($e['description'],0,200)); ?></p>
+                        <?php if (hasPermission(PERM_CONTENT)): ?>
                         <div class="text-end">
                             <a href="events.php?delete=<?php echo $e['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Delete event?')">Delete</a>
                         </div>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <?php endwhile; ?>

@@ -1,10 +1,15 @@
-  <?php
+<?php
 require_once '../includes/session.php';
 require_once '../includes/functions.php';
 requireExecutive();
 
 $conn = getDBConnection();
 $userId = $_SESSION['user_id'];
+
+// Ensure user has permission for POST actions and delete/verify
+if (($_SERVER['REQUEST_METHOD'] === 'POST' || isset($_GET['delete']) || isset($_GET['verify'])) && !hasPermission(PERM_CONTENT)) {
+    die("Unauthorized access.");
+}
 
 // Handle opportunity verification
 if (isset($_GET['verify'])) {
@@ -160,9 +165,11 @@ $stats = $conn->query("
                 <div class="card">
                     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                         <h4 class="mb-0">Manage Opportunities</h4>
+                        <?php if (hasPermission(PERM_CONTENT)): ?>
                         <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#addOpportunityModal">
                             <i class="fas fa-plus"></i> Add Opportunity
                         </button>
+                        <?php endif; ?>
                     </div>
                     <div class="card-body">
                         <!-- Success/Error Messages -->
@@ -247,6 +254,7 @@ $stats = $conn->query("
                                             <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#viewModal<?php echo $opp['id']; ?>">
                                                 <i class="fas fa-eye"></i>
                                             </button>
+                                            <?php if (hasPermission(PERM_CONTENT)): ?>
                                             <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal<?php echo $opp['id']; ?>">
                                                 <i class="fas fa-edit"></i>
                                             </button>
@@ -258,6 +266,7 @@ $stats = $conn->query("
                                             <a href="?delete=<?php echo $opp['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Delete this opportunity?')">
                                                 <i class="fas fa-trash"></i>
                                             </a>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
                                     
@@ -326,6 +335,7 @@ $stats = $conn->query("
                                         </div>
                                     </div>
                                     
+                                    <?php if (hasPermission(PERM_CONTENT)): ?>
                                     <!-- Edit Modal -->
                                     <div class="modal fade" id="editModal<?php echo $opp['id']; ?>" tabindex="-1">
                                         <div class="modal-dialog modal-lg">
@@ -402,6 +412,7 @@ $stats = $conn->query("
                                             </div>
                                         </div>
                                     </div>
+                                    <?php endif; ?>
                                     <?php endwhile; ?>
                                 </tbody>
                             </table>
@@ -412,6 +423,7 @@ $stats = $conn->query("
         </div>
     </div>
 
+    <?php if (hasPermission(PERM_CONTENT)): ?>
     <!-- Add Opportunity Modal -->
     <div class="modal fade" id="addOpportunityModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
@@ -474,5 +486,6 @@ $stats = $conn->query("
             </div>
         </div>
     </div>
+    <?php endif; ?>
 
 <?php include 'footer.php'; ?>

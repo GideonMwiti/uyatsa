@@ -6,11 +6,8 @@ if (session_status() === PHP_SESSION_NONE) {
 $full_name = $_SESSION['full_name'] ?? 'Member';
 $institution = $_SESSION['institution'] ?? '';
 $role = $_SESSION['role'] ?? 'Member';
-$profile_img = '';
 if (!empty($_SESSION['profile_image'])) {
     $profile_img = '../' . (defined('PROFILE_IMAGE_PATH') ? PROFILE_IMAGE_PATH : 'assets/uploads/profile/') . $_SESSION['profile_image'];
-} else {
-    $profile_img = 'https://via.placeholder.com/120';
 }
 $unread_notifications = 0;
 if (!empty($_SESSION['user_id'])) {
@@ -19,82 +16,21 @@ if (!empty($_SESSION['user_id'])) {
 }
 ?>
 
-<style>
-    .user-sidebar-wrapper {
-        background: linear-gradient(180deg, #08203a 0%, #0f3a63 100%);
-        color: #f8fbff;
-        min-height: 100vh;
-        padding: 30px 18px;
-        border-radius: 12px;
-    }
-    .user-sidebar-wrapper .profile-img {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 4px solid rgba(255,255,255,0.12);
-        display: block;
-        margin: 0 auto 10px auto;
-    }
-    .user-sidebar-wrapper h5 {
-        color: #f8fbff;
-        font-weight: 700;
-        margin-bottom: 6px;
-        text-align: center;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.45);
-    }
-    .user-role-badge {
-        display: inline-block;
-        padding: 6px 10px;
-        border-radius: 14px;
-        background: rgba(255,255,255,0.12);
-        color: #fff;
-        font-size: 0.85rem;
-        text-align: center;
-    }
-    .notif-badge {
-        display: inline-block;
-        min-width: 26px;
-        padding: 4px 8px;
-        border-radius: 14px;
-        background: #dc3545;
-        color: #fff;
-        font-weight: 700;
-        margin-left: 8px;
-        font-size: 0.85rem;
-    }
-    .sidebar-link {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        color: #ffffff;
-        padding: 10px 12px;
-        border-radius: 8px;
-        margin-bottom: 8px;
-        font-size: 1.05rem;
-        font-weight: 700;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.45);
-        opacity: 1;
-    }
-    .sidebar-link .sidebar-icon { width: 28px; text-align:center; font-size:1.2rem; }
-    .sidebar-link:hover { background: rgba(255,255,255,0.08); text-decoration: none; color: #ffffff; }
-    .sidebar-link.active { background: rgba(255,255,255,0.14); font-weight:800; color: #ffffff; }
-
-    .sidebar-link .sidebar-icon { color: #ffffff; opacity: 0.95; }
-    @media (max-width: 767px) {
-        .user-sidebar-wrapper {
-            padding: 18px 12px;
-            border-radius: 0;
-            min-height: auto;
-        }
-        .user-sidebar-wrapper .profile-img { width: 80px; height: 80px; }
-        .sidebar-link { font-size: 0.95rem; padding: 8px 10px; }
-    }
-</style>
-
-<div class="user-sidebar-wrapper">
+<div class="sidebar-overlay d-md-none" id="sidebarOverlay"></div>
+<div class="user-sidebar-wrapper" id="userSidebar">
+    <div class="d-flex justify-content-end d-md-none mb-2">
+        <button class="btn btn-link text-white p-0" id="sidebarClose" type="button" style="text-decoration:none;">
+            <i class="fas fa-times fa-lg"></i>
+        </button>
+    </div>
         <div class="text-center mb-3">
-        <img src="<?php echo $profile_img; ?>" alt="Profile" class="profile-img">
+        <?php if (!empty($profile_img)): ?>
+            <img src="<?php echo htmlspecialchars($profile_img); ?>" alt="Profile" class="profile-img">
+        <?php else: ?>
+            <div class="profile-img bg-white d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width:100px; height:100px; border-radius:50%; border: 3px solid rgba(255,255,255,0.2);">
+                <i class="fas fa-user fa-3x" style="color:#1a237e;"></i>
+            </div>
+        <?php endif; ?>
         <h5><?php echo htmlspecialchars($institution ?: $full_name); ?></h5>
         <div>
             <span class="user-role-badge"><?php echo htmlspecialchars(ucfirst($role)); ?></span>
@@ -138,3 +74,23 @@ if (!empty($_SESSION['user_id'])) {
     </nav>
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleBtn = document.getElementById('sidebarToggle');
+    const closeBtn = document.getElementById('sidebarClose');
+    const sidebar = document.getElementById('userSidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    function toggleSidebar() {
+        if (sidebar && overlay) {
+            sidebar.classList.toggle('show');
+            overlay.classList.toggle('show');
+            document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : ''; // Prevent body scroll
+        }
+    }
+
+    if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+    if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
+    if (overlay) overlay.addEventListener('click', toggleSidebar);
+});
+</script>

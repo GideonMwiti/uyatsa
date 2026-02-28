@@ -5,6 +5,11 @@ requireExecutive();
 
 $conn = getDBConnection();
 
+// Ensure user has member permission for POST actions and delete/activate
+if (($_SERVER['REQUEST_METHOD'] === 'POST' || isset($_GET['delete']) || isset($_GET['activate'])) && !hasPermission(PERM_MEMBERS)) {
+    die("Unauthorized access.");
+}
+
 // Handle member update
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_member'])) {
     $member_id = sanitize($_POST['member_id']);
@@ -51,6 +56,21 @@ if (isset($_GET['activate'])) {
         exit();
     } else {
         $_SESSION['error'] = 'Failed to activate member.';
+    }
+}
+
+// Handle member approval
+if (isset($_GET['approve'])) {
+    $memberId = (int)$_GET['approve'];
+    $stmt = $conn->prepare("UPDATE users SET is_approved = 1 WHERE id = ?");
+    $stmt->bind_param("i", $memberId);
+    
+    if ($stmt->execute()) {
+        $_SESSION['success'] = 'Member approved successfully!';
+        header('Location: members.php');
+        exit();
+    } else {
+        $_SESSION['error'] = 'Failed to approve member.';
     }
 }
 
@@ -153,9 +173,11 @@ $stats = $conn->query("
                 <div class="card">
                     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                         <h4 class="mb-0">Manage Members</h4>
-                        <a href="register.php" class="btn btn-light btn-sm">
-                            <i class="fas fa-user-plus"></i> Add Member
+                        <?php if (hasPermission(PERM_MEMBERS)): ?>
+                        <a href="add-user.php" class="btn btn-light btn-sm">
+                            <i class="fas fa-user-plus"></i> Add New User
                         </a>
+                        <?php endif; ?>
                     </div>
                     <div class="card-body">
                         <!-- Success/Error Messages -->
@@ -276,23 +298,34 @@ $stats = $conn->query("
                                             <span class="badge bg-<?php echo $statusBadge[$member['status']]; ?>">
                                                 <?php echo ucfirst($member['status']); ?>
                                             </span>
+                                            <?php if ($member['is_approved'] == 0): ?>
+                                                <br>
+                                                <span class="badge bg-warning text-dark mt-1">Pending Approval</span>
+                                            <?php endif; ?>
                                         </td>
                                         <td><?php echo date('M Y', strtotime($member['registration_date'])); ?></td>
                                         <td>
-                                            <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#viewModal<?php echo $member['id']; ?>">
+                                            <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#viewModal<?php echo $member['id']; ?>" title="View Details">
                                                 <i class="fas fa-eye"></i>
                                             </button>
-                                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal<?php echo $member['id']; ?>">
+                                            <?php if (hasPermission(PERM_MEMBERS)): ?>
+                                            <?php if ($member['is_approved'] == 0): ?>
+                                                <a href="?approve=<?php echo $member['id']; ?>" class="btn btn-sm btn-success" title="Approve Member" onclick="return confirm('Approve this member?')">
+                                                    <i class="fas fa-check"></i>
+                                                </a>
+                                            <?php endif; ?>
+                                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal<?php echo $member['id']; ?>" title="Edit Member">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                             <?php if ($member['status'] == 'active'): ?>
-                                                <a href="?delete=<?php echo $member['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Deactivate this member?')">
+                                                <a href="?delete=<?php echo $member['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Deactivate this member?')" title="Deactivate">
                                                     <i class="fas fa-user-slash"></i>
                                                 </a>
                                             <?php else: ?>
                                                 <a href="?activate=<?php echo $member['id']; ?>" class="btn btn-sm btn-success" onclick="return confirm('Activate this member?')">
                                                     <i class="fas fa-user-check"></i>
                                                 </a>
+                                            <?php endif; ?>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
@@ -391,6 +424,7 @@ $stats = $conn->query("
                                         </div>
                                     </div>
                                     
+                                    <?php if (hasPermission(PERM_MEMBERS)): ?>
                                     <!-- Edit Modal -->
                                     <div class="modal fade" id="editModal<?php echo $member['id']; ?>" tabindex="-1">
                                         <div class="modal-dialog">
@@ -440,6 +474,7 @@ $stats = $conn->query("
                                             </div>
                                         </div>
                                     </div>
+                                    <?php endif; ?>
                                     <?php endwhile; ?>
                                 </tbody>
                             </table>

@@ -175,15 +175,20 @@ $executives = $conn->query("SELECT id, full_name, role, email, phone FROM users 
                             </div>
                             <div class="card-body">
                                 <div class="d-grid gap-2">
+                                    <?php if (hasPermission(PERM_CONTENT)): ?>
                                     <a href="announcements.php?action=create" class="btn btn-primary">
                                         <i class="fas fa-plus"></i> New Announcement
                                     </a>
                                     <a href="opportunities.php?action=create" class="btn btn-success">
                                         <i class="fas fa-plus"></i> Add Opportunity
                                     </a>
+                                    <?php endif; ?>
+                                    
+                                    <?php if (hasPermission(PERM_FINANCES)): ?>
                                     <a href="finances.php?action=create" class="btn btn-warning">
                                         <i class="fas fa-money-bill"></i> Record Transaction
                                     </a>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>

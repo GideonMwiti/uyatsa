@@ -6,6 +6,11 @@ requireExecutive();
 $conn = getDBConnection();
 $userId = $_SESSION['user_id'];
 
+// Check if user has finance permissions for POST actions and delete
+if (($_SERVER['REQUEST_METHOD'] === 'POST' || isset($_GET['delete'])) && !hasPermission(PERM_FINANCES)) {
+    die("Unauthorized access.");
+}
+
 // Handle new transaction
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_transaction'])) {
     $transaction_type = sanitize($_POST['transaction_type']);
@@ -122,9 +127,11 @@ $members = $conn->query("SELECT id, full_name, username FROM users ORDER BY full
                 <div class="card">
                     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                         <h4 class="mb-0">Financial Transactions</h4>
+                        <?php if (hasPermission(PERM_FINANCES)): ?>
                         <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
                             <i class="fas fa-plus"></i> New Transaction
                         </button>
+                        <?php endif; ?>
                     </div>
                     <div class="card-body">
                         <!-- Success/Error Messages -->
@@ -201,12 +208,14 @@ $members = $conn->query("SELECT id, full_name, username FROM users ORDER BY full
                                             <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#viewModal<?php echo $transaction['id']; ?>">
                                                 <i class="fas fa-eye"></i>
                                             </button>
+                                            <?php if (hasPermission(PERM_FINANCES)): ?>
                                             <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#updateModal<?php echo $transaction['id']; ?>">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                             <a href="?delete=<?php echo $transaction['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Delete this transaction?')">
                                                 <i class="fas fa-trash"></i>
                                             </a>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
                                     
@@ -272,6 +281,7 @@ $members = $conn->query("SELECT id, full_name, username FROM users ORDER BY full
                                         </div>
                                     </div>
                                     
+                                    <?php if (hasPermission(PERM_FINANCES)): ?>
                                     <!-- Update Modal -->
                                     <div class="modal fade" id="updateModal<?php echo $transaction['id']; ?>" tabindex="-1">
                                         <div class="modal-dialog">
@@ -307,6 +317,7 @@ $members = $conn->query("SELECT id, full_name, username FROM users ORDER BY full
                                             </div>
                                         </div>
                                     </div>
+                                    <?php endif; ?>
                                     <?php endwhile; ?>
                                 </tbody>
                             </table>
@@ -317,6 +328,7 @@ $members = $conn->query("SELECT id, full_name, username FROM users ORDER BY full
         </div>
     </div>
 
+    <?php if (hasPermission(PERM_FINANCES)): ?>
     <!-- Add Transaction Modal -->
     <div class="modal fade" id="addModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
@@ -407,5 +419,6 @@ $members = $conn->query("SELECT id, full_name, username FROM users ORDER BY full
             </div>
         </div>
     </div>
+    <?php endif; ?>
 
 <?php include 'footer.php'; ?>

@@ -6,6 +6,11 @@ requireExecutive();
 $conn = getDBConnection();
 $userId = $_SESSION['user_id'];
 
+// Ensure user has permission for POST actions and delete/important
+if (($_SERVER['REQUEST_METHOD'] === 'POST' || isset($_GET['delete']) || isset($_GET['important'])) && !hasPermission(PERM_CONTENT)) {
+    die("Unauthorized access.");
+}
+
 // Handle new announcement
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_announcement'])) {
     $title = sanitize($_POST['title']);
@@ -76,9 +81,11 @@ $announcements = $conn->query("
                 <div class="card">
                     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                         <h4 class="mb-0">Manage Announcements</h4>
+                        <?php if (hasPermission(PERM_CONTENT)): ?>
                         <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
                             <i class="fas fa-plus"></i> New Announcement
                         </button>
+                        <?php endif; ?>
                     </div>
                     <div class="card-body">
                         <!-- Success/Error Messages -->
@@ -134,12 +141,14 @@ $announcements = $conn->query("
                                             <a href="javascript:void(0)" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#viewModal<?php echo $announcement['id']; ?>">
                                                 <i class="fas fa-eye"></i>
                                             </a>
+                                            <?php if (hasPermission(PERM_CONTENT)): ?>
                                             <a href="?important=<?php echo $announcement['id']; ?>" class="btn btn-sm btn-warning">
                                                 <i class="fas fa-star"></i>
                                             </a>
                                             <a href="?delete=<?php echo $announcement['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Delete this announcement?')">
                                                 <i class="fas fa-trash"></i>
                                             </a>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
                                     
@@ -196,6 +205,7 @@ $announcements = $conn->query("
         </div>
     </div>
 
+    <?php if (hasPermission(PERM_CONTENT)): ?>
     <!-- Add Announcement Modal -->
     <div class="modal fade" id="addModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
@@ -252,5 +262,6 @@ $announcements = $conn->query("
             </div>
         </div>
     </div>
+    <?php endif; ?>
 
 <?php include 'footer.php'; ?>

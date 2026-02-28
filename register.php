@@ -37,19 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Hash password
             $hashed_password = password_hash($password, PASSWORD_BCRYPT);
             
-            // Insert user
-            $stmt = $conn->prepare("INSERT INTO users (full_name, username, email, password, phone, institution, course, year_of_study) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            // Insert user natively as a member that requires admin approval
+            $stmt = $conn->prepare("INSERT INTO users (full_name, username, email, password, phone, institution, course, year_of_study, role, is_approved) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'member', 0)");
             $stmt->bind_param("ssssssss", $full_name, $username, $email, $hashed_password, $phone, $institution, $course, $year_of_study);
             
             if ($stmt->execute()) {
-                $success = 'Registration successful! You can now login.';
-                
-                // Auto login after registration (optional)
-                // $_SESSION['user_id'] = $conn->insert_id;
-                // $_SESSION['username'] = $username;
-                // $_SESSION['role'] = 'member';
-                // header('Location: user/dashboard.php');
-                // exit();
+                $success = 'Registration successful! An administrator must approve your account before you can log in.';
             } else {
                 $error = 'Registration failed. Please try again.';
             }

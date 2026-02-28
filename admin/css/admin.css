@@ -32,13 +32,44 @@ body {
     min-height: 100vh;
     background: var(--corporate-navy);
     transition: all 0.3s;
+    position: relative;
 }
 
 /* Ensure sidebar doesn't take full height on mobile if stacked */
 @media (max-width: 768px) {
     .sidebar-wrapper {
         min-height: auto !important;
-        margin-bottom: 20px;
+        position: fixed;
+        top: 0;
+        left: -260px;
+        width: 250px;
+        height: 100vh;
+        z-index: 1050;
+        /* Above header */
+        margin-bottom: 0;
+        transition: left 0.3s ease-in-out;
+        overflow-y: auto;
+        box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .sidebar-wrapper.show {
+        left: 0;
+    }
+
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1040;
+        /* Just below sidebar */
+    }
+
+    .sidebar-overlay.show {
+        display: block;
     }
 }
 

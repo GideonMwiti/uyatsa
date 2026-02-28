@@ -4,6 +4,13 @@ require_once '../includes/functions.php';
 requireLogin();
 requireExecutive();
 
+// Ensure only top-level admins with settings permission can access this page
+if (!hasPermission(PERM_SETTINGS)) {
+    $_SESSION['error'] = "You do not have permission to access system settings.";
+    header('Location: dashboard.php');
+    exit();
+}
+
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // sanitize and save settings

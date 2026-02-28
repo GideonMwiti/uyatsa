@@ -36,6 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     if ($stmt->execute()) {
         $_SESSION['success'] = 'Profile updated successfully!';
         $_SESSION['full_name'] = $full_name;
+        $_SESSION['profile_image'] = $profile_image;
+        $_SESSION['institution'] = $institution;
         header('Location: profile.php');
         exit();
     } else {
@@ -102,16 +104,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
             margin-bottom: 20px;
         }
     </style>
+    <link href="../assets/css/modern.css" rel="stylesheet">
+    <link href="css/user.css" rel="stylesheet">
 </head>
 <body>
     <?php include 'header.php'; ?>
     
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-3">
-                <?php include 'sidebar.php'; ?>
-            </div>
-            <div class="col-md-9">
+    <div class="dashboard-row">
+            <?php include 'sidebar.php'; ?>
+            <div class="dashboard-main-content">
+                 <div class="p-4 w-100">
                 <!-- Success/Error Messages -->
                 <?php if (isset($_SESSION['success'])): ?>
                     <div class="alert alert-success alert-dismissible fade show">
@@ -319,5 +321,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
     <?php include 'footer.php'; ?>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+</div></body>
 </html>

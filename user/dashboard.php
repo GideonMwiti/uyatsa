@@ -53,105 +53,17 @@ $events = $conn->query("SELECT * FROM events WHERE start_date > NOW() AND status
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="../assets/css/modern.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f0f2f5;
-        }
-        
-        .member-stats {
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            color: white;
-            text-align: center;
-            box-shadow: var(--shadow-md);
-            transition: transform 0.3s ease;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        
-        .member-stats:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .member-stats i {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            opacity: 0.8;
-        }
-        
-        .member-stats h3 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin: 0;
-            font-family: var(--font-heading);
-        }
-        
-        .member-stats h5 {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .bg-stat-1 { background: linear-gradient(135deg, var(--corporate-navy) 0%, #1e3c72 100%); }
-        .bg-stat-2 { background: linear-gradient(135deg, var(--corporate-accent) 0%, #f39c12 100%); }
-        .bg-stat-3 { background: linear-gradient(135deg, #112240 0%, #2980b9 100%); }
-        .bg-stat-4 { background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%); }
-        
-        .card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: var(--shadow-sm);
-            margin-bottom: 20px;
-        }
-        
-        .card-header {
-            background-color: white;
-            border-bottom: 1px solid var(--corporate-border);
-            padding: 15px 20px;
-            font-weight: 700;
-            color: var(--corporate-navy);
-        }
-        
-        .opportunity-item, .announcement-item {
-            padding: 15px;
-            border-bottom: 1px solid #f0f0f0;
-            transition: background 0.2s;
-        }
-        
-        .opportunity-item:last-child, .announcement-item:last-child {
-            border-bottom: none;
-        }
-        
-        .opportunity-item:hover, .announcement-item:hover {
-            background-color: #f8f9fa;
-        }
-
-        .welcome-section {
-            background: white;
-            padding: 20px 30px;
-            border-radius: 12px;
-            box-shadow: var(--shadow-sm);
-            margin-bottom: 30px;
-            border-left: 5px solid var(--corporate-accent);
-        }
-    </style>
+    <link href="css/user.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
+    <?php include 'header.php'; ?>
+    
+        <div class="dashboard-row">
             <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 p-0">
-                <?php include 'sidebar.php'; ?>
-            </div>
-
+            <?php include 'sidebar.php'; ?>
             <!-- Main Content -->
-            <div class="col-md-9 col-lg-10 p-4">
+            <div class="dashboard-main-content">
+                 <div class="p-4 w-100">
                 <div class="welcome-section d-flex justify-content-between align-items-center">
                     <div>
                         <h2 class="mb-1 fw-bold text-navy">Member Portal</h2>
@@ -165,31 +77,35 @@ $events = $conn->query("SELECT * FROM events WHERE start_date > NOW() AND status
                 <!-- User Statistics -->
                 <div class="row mb-4 g-3">
                     <div class="col-md-3">
-                        <div class="member-stats bg-stat-1">
-                            <i class="fas fa-briefcase"></i>
-                            <h5>My Opportunities</h5>
-                            <h3><?php echo $userStats['my_opportunities']; ?></h3>
+                        <div class="card stat-card bg-primary text-white h-100 p-3" style="border-radius: 12px;">
+                            <div class="card-body text-center d-flex flex-column justify-content-center">
+                                <h5><i class="fas fa-briefcase mb-2" style="font-size: 2rem;"></i><br>My Opportunities</h5>
+                                <h2 class="fw-bold m-0"><?php echo $userStats['my_opportunities']; ?></h2>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="member-stats bg-stat-2">
-                            <i class="fas fa-money-bill-wave"></i>
-                            <h5>Contributions</h5>
-                            <h3><?php echo $userStats['my_contributions']; ?></h3>
+                        <div class="card stat-card bg-warning text-dark h-100 p-3" style="border-radius: 12px;">
+                            <div class="card-body text-center d-flex flex-column justify-content-center">
+                                <h5><i class="fas fa-money-bill-wave mb-2" style="font-size: 2rem;"></i><br>Contributions</h5>
+                                <h2 class="fw-bold m-0"><?php echo $userStats['my_contributions']; ?></h2>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="member-stats bg-stat-3">
-                            <i class="fas fa-calendar-check"></i>
-                            <h5>Events</h5>
-                            <h3><?php echo $userStats['events_registered']; ?></h3>
+                        <div class="card stat-card bg-success text-white h-100 p-3" style="border-radius: 12px;">
+                            <div class="card-body text-center d-flex flex-column justify-content-center">
+                                <h5><i class="fas fa-calendar-check mb-2" style="font-size: 2rem;"></i><br>Events</h5>
+                                <h2 class="fw-bold m-0"><?php echo $userStats['events_registered']; ?></h2>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="member-stats bg-stat-4">
-                            <i class="fas fa-images"></i>
-                            <h5>Gallery</h5>
-                            <h3><?php echo $userStats['gallery_uploads']; ?></h3>
+                        <div class="card stat-card bg-info text-white h-100 p-3" style="border-radius: 12px;">
+                            <div class="card-body text-center d-flex flex-column justify-content-center">
+                                <h5><i class="fas fa-images mb-2" style="font-size: 2rem;"></i><br>Gallery</h5>
+                                <h2 class="fw-bold m-0"><?php echo $userStats['gallery_uploads']; ?></h2>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -296,10 +212,9 @@ $events = $conn->query("SELECT * FROM events WHERE start_date > NOW() AND status
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <?php include 'footer.php'; ?>
 </body>
 </html>

@@ -71,15 +71,15 @@ $materials = $conn->query("SELECT m.*, u.full_name FROM study_materials m LEFT J
     <style>
         .material-card { min-height: 160px; }
     </style>
+    <link href="../assets/css/modern.css" rel="stylesheet">
+    <link href="css/user.css" rel="stylesheet">
 </head>
 <body>
     <?php include 'header.php'; ?>
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-3">
-                <?php include 'sidebar.php'; ?>
-            </div>
-            <div class="col-md-9">
+    <div class="dashboard-row">
+            <?php include 'sidebar.php'; ?>
+            <div class="dashboard-main-content">
+                 <div class="p-4 w-100">
                 <h4>Study Materials</h4>
                 <?php if (!empty($message)): ?><div class="alert alert-success"><?php echo $message; ?></div><?php endif; ?>
                 <?php if (!empty($error)): ?><div class="alert alert-danger"><?php echo $error; ?></div><?php endif; ?>
@@ -141,5 +141,5 @@ $materials = $conn->query("SELECT m.*, u.full_name FROM study_materials m LEFT J
     </div>
     <?php include 'footer.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+</div></body>
 </html>

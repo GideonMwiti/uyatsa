@@ -57,7 +57,7 @@ $totalContributions = $conn->query("SELECT COUNT(*) as c, COALESCE(SUM(amount),0
                                     <i class="fas fa-hand-holding-usd fa-2x text-info"></i>
                                 </div>
                                 <h5 class="card-title">Contributions</h5>
-                                <p class="display-6 fw-bold mb-0">₱<?php echo number_format($totalContributions['total_amount'],2); ?></p>
+                                <p class="display-6 fw-bold mb-0">Ksh <?php echo number_format($totalContributions['total_amount'],2); ?></p>
                                 <small class="text-muted">Total contributions received</small>
                             </div>
                         </div>
@@ -69,7 +69,7 @@ $totalContributions = $conn->query("SELECT COUNT(*) as c, COALESCE(SUM(amount),0
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item"><strong>Members:</strong> <?php echo $totalMembers; ?> registered</li>
                             <li class="list-group-item"><strong>Events:</strong> <?php echo $totalEvents; ?> organized</li>
-                            <li class="list-group-item"><strong>Contributions:</strong> ₱<?php echo number_format($totalContributions['total_amount'],2); ?> from <?php echo $totalContributions['c']; ?> transactions</li>
+                            <li class="list-group-item"><strong>Contributions:</strong> Ksh <?php echo number_format($totalContributions['total_amount'],2); ?> from <?php echo $totalContributions['c']; ?> transactions</li>
                         </ul>
                     </div>
                 </div>
