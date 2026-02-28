@@ -31,21 +31,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['profile_image'] = $user['profile_image'];
                 $_SESSION['institution'] = $user['institution'];
                 
-                // Check if account is approved
-                if ($user['is_approved'] == 0) {
-                    session_destroy();
-                    session_start();
+                // Only block members if not approved
+                $isApproved = ($user['is_approved'] ?? 1);
+                if ($user['role'] === 'member' && $isApproved == 0) {
+                    // Clear session and block login
+                    if (session_status() === PHP_SESSION_ACTIVE) {
+                        session_unset();
+                        session_destroy();
+                    }
+                    // Start a new session for error message
+                    if (session_status() !== PHP_SESSION_ACTIVE) {
+                        session_start();
+                    }
                     $error = 'Your account is pending administrator approval.';
                 } else {
                     // Update last login
                     $updateStmt = $conn->prepare("UPDATE users SET last_login = NOW() WHERE id = ?");
                     $updateStmt->bind_param("i", $user['id']);
                     $updateStmt->execute();
-                    
                     // Redirect based on role
                     $executiveRoles = ['Patron', 'Chairperson', 'Vice_Chairperson', 'Secretary_General',
                                      'Treasurer', 'Organizing_Secretary', 'Publicity_Officer', 'NextGen_Docket'];
-                    
                     if (in_array($user['role'], $executiveRoles)) {
                         header('Location: admin/dashboard.php');
                     } else {

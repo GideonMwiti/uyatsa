@@ -18,6 +18,7 @@ CREATE TABLE users (
     profile_image VARCHAR(255),
     bio TEXT,
     status ENUM('active', 'inactive', 'alumni') DEFAULT 'active',
+    is_approved TINYINT(1) DEFAULT 0,
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP NULL,
     reset_token VARCHAR(255),
